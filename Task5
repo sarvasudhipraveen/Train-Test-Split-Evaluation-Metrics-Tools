@@ -1,0 +1,58 @@
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, precision_score, recall_score, confusion_matrix
+
+# Load Dataset
+df = pd.read_csv("/content/heart.csv")
+
+# Display first 5 rows
+print("First 5 Rows:")
+print(df.head())
+
+# Features (X) and Target (y)
+X = df.drop("output", axis=1)
+y = df["output"]
+
+# Split dataset into Training and Testing sets
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,
+    random_state=42
+)
+
+print("\nTraining Data Shape:", X_train.shape)
+print("Testing Data Shape:", X_test.shape)
+
+# Create Logistic Regression Model
+model = LogisticRegression(max_iter=5000) # Increased max_iter to prevent convergence warning
+
+# Train the Model
+model.fit(X_train, y_train)
+
+# Make Predictions
+y_pred = model.predict(X_test)
+
+# Evaluation Metrics
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+cm = confusion_matrix(y_test, y_pred)
+
+# Print Results
+print("\n===== MODEL EVALUATION ===telek=")
+
+print(f"Accuracy : {accuracy:.4f}")
+print(f"Precision: {precision:.4f}")
+print(f"Recall   : {recall:.4f}")
+
+print("\nConfusion Matrix:")
+print(cm)
+
+# Interpretation
+print("\n===== INTERPRETATION ===telek=")
+print("Accuracy shows overall correctness of the model.")
+print("Precision shows how many predicted positive cases are actually positive.")
+print("Recall shows how many actual positive cases are correctly identified.")
+print("Confusion Matrix shows TP, TN, FP, and FN values.")
